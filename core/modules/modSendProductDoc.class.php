@@ -31,7 +31,7 @@ include_once DOL_DOCUMENT_ROOT .'/core/modules/DolibarrModules.class.php';
 /**
  *  Description and activation class for module MyModule
  */
-class modsendproductdoc extends DolibarrModules
+class modSendProductDoc extends DolibarrModules
 {
 	/**
 	 *   Constructor. Define names, constants, directories, boxes, permissions
@@ -48,7 +48,7 @@ class modsendproductdoc extends DolibarrModules
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
 		$this->numero = 231000;
 		// Key text used to identify module (for permissions, menus, etc...)
-		$this->rights_class = 'tarif';
+		$this->rights_class = 'sendproductdoc';
 
 		// Family can be 'crm','financial','hr','projects','products','ecm','technic','other'
 		// It is used to group modules in module setup page
@@ -66,7 +66,7 @@ class modsendproductdoc extends DolibarrModules
 		// Name of image file used for this module.
 		// If file is in theme/yourtheme/img directory under name object_pictovalue.png, use this->picto='pictovalue'
 		// If file is in module/img directory under name object_pictovalue.png, use this->picto='pictovalue@module'
-		$this->picto='generic';
+		$this->picto='sendproductdoc.png@sendproductdoc';
 
 		// Defined all module parts (triggers, login, substitutions, menus, css, etc...)
 		// for default path (eg: /mymodule/core/xxxxx) (0=disable, 1=enable)
@@ -95,7 +95,7 @@ class modsendproductdoc extends DolibarrModules
 		$this->dirs = array();
 
 		// Config pages. Put here list of php page, stored into mymodule/admin directory, to use to setup module.
-		$this->config_page_url = false;
+		$this->config_page_url = 'sendproductdoc.php@sendproductdoc';
 
 		// Dependencies
 		$this->depends = array();		// List of modules id that must be enabled if this module is enabled
@@ -276,7 +276,7 @@ class modsendproductdoc extends DolibarrModules
 	 */
 	function load_tables()
 	{
-		return $this->_load_tables('/tarif/sql/');
+		return $this->_load_tables('/sendproductdoc/sql/');
 	}
 }
 

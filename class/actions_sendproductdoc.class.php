@@ -11,10 +11,11 @@ class ActionsSendProductDoc
 			// Display button allowing to add product documentation as e-mail attachment
 			$buttonAdd = '<input id="addproductdoc" class="button" type="submit" value="'.$langs->trans('AddProductDocAsAttachment').'" name="addproductdoc" />';
 			$buttonRemove = '<input id="removeproductdoc" class="button" type="submit" value="'.$langs->trans('RemoveProductDocAsAttachment').'" name="removeproductdoc" />';
+			$buttons = '<div style="float: right">'.$buttonAdd.$buttonRemove.'</div>';
 			?>
 			<script type="text/javascript">
 				$(document).ready(function() {
-					$('#addfile').after('<br /><?= $buttonAdd.$buttonRemove ?>');
+					$('#addfile').after('<?= $buttons ?>');
 				});
 			</script>
 			<?
@@ -29,6 +30,9 @@ class ActionsSendProductDoc
 		// Search for attached files to each product in the document and add it as an attachement to the e-mail
 		if (GETPOST('addproductdoc'))
 		{
+			/*echo '<pre>';
+			print_r($object);
+			echo '</pre>';*/
 			include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 			$listofpaths = (! empty($_SESSION["listofpaths"])) ? explode(';',$_SESSION["listofpaths"]) : array();
 			$listofnames = (! empty($_SESSION["listofnames"])) ? explode(';',$_SESSION["listofnames"]) : array();
@@ -36,7 +40,7 @@ class ActionsSendProductDoc
 			$nbFilesAdded = 0;
 			
 			foreach($object->lines as $line) {
-				$ref = dol_sanitizeFileName($line->ref);
+				$ref = dol_sanitizeFileName($line->product_ref);
 				
 				// Get files attached to the product
 				$fileList = dol_dir_list($conf->product->dir_output . '/' . $ref,'files',0);
