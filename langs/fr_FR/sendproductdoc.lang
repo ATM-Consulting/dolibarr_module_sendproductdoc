@@ -6,3 +6,4 @@ XFilesHasBeenRemoved=Fichier(s) retiré(s) des pièce-jointes : %s
 
 # ADMIN
 SendProductDocSetup=Configuration du module d'envoi de documentation produit par e-mail
+ExtensionsAllowedToBeSend=Extensions autorisées (vide pour toutes)

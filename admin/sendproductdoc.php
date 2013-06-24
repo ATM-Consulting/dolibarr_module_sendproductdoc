@@ -4,6 +4,7 @@ $res=@include("../../main.inc.php");					// For root directory
 if (! $res) $res=@include("../../../main.inc.php");		// For "custom" directory
 
 $langs->load("admin");
+$langs->load("sendproductdoc@sendproductdoc");
 
 // Security check
 if (! $user->admin)
@@ -53,9 +54,8 @@ print_fiche_titre($langs->trans("SendProductDocSetup"), $linkback, 'sendproductd
 
 print '<br>';
 
-$head = milestoneadmin_prepare_head();
-
-dol_fiche_head($head, 'options', $langs->trans("ModuleSetup"));
+//$head = array();
+//dol_fiche_head($head, '', $langs->trans("ModuleSetup"));
 
 $var=true;
 print '<table class="noborder" width="100%">';
@@ -69,32 +69,18 @@ print '</tr>';
  * Formulaire parametres divers
  */
 
-// Hide product details inside milestone
+// Allowed extensions
 $var=!$var;
 print '<tr '.$bc[$var].'>';
-print '<td>'.$langs->trans("HideBydefaultProductDetailsInsideMilestone").'</td>';
+print '<td>'.$langs->trans("ExtensionsAllowedToBeSend").'</td>';
 print '<td align="center" width="20">&nbsp;</td>';
 
 print '<td align="center" width="100">';
-if (! empty($conf->use_javascript_ajax))
-{
-	print ajax_constantonoff('MILESTONE_HIDE_PRODUCT_DETAILS');
-}
-else
-{
-	if (empty($conf->global->MILESTONE_HIDE_PRODUCT_DETAILS))
-	{
-		print '<a href="'.$_SERVER['PHP_SELF'].'?action=set_MILESTONE_HIDE_PRODUCT_DETAILS">'.img_picto($langs->trans("Disabled"),'off').'</a>';
-	}
-	else
-	{
-		print '<a href="'.$_SERVER['PHP_SELF'].'?action=del_MILESTONE_HIDE_PRODUCT_DETAILS">'.img_picto($langs->trans("Enabled"),'on').'</a>';
-	}
-}
+print '<input type="text" name="SENDPRODUCTDOC_EXTENSIONS_OK" value="'.$conf->global->SENDPRODUCTDOC_EXTENSIONS_OK.'" size="50" />';
 print '</td></tr>';
 
 // Hide product description inside milestone
-$var=!$var;
+/*$var=!$var;
 print '<tr '.$bc[$var].'>';
 print '<td>'.$langs->trans("HideByDefaultProductDescInsideMilestone").'</td>';
 print '<td align="center" width="20">&nbsp;</td>';
@@ -115,7 +101,7 @@ else
 		print '<a href="'.$_SERVER['PHP_SELF'].'?action=del_MILESTONE_HIDE_PRODUCT_DESC">'.img_picto($langs->trans("Enabled"),'on').'</a>';
 	}
 }
-print '</td></tr>';
+print '</td></tr>';*/
 
 print '</table>';
 
