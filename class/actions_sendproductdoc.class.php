@@ -6,7 +6,10 @@ class ActionsSendProductDoc
 		global $langs;
 		$langs->load('sendproductdoc@sendproductdoc');
 		
-		if (in_array('formmail',explode(':',$parameters['context'])))
+		if (in_array('formmail',explode(':',$parameters['context']))
+			&& in_array('propalcard',explode(':',$parameters['context']))
+			&& in_array('ordercard',explode(':',$parameters['context']))
+			&& in_array('invoicecard',explode(':',$parameters['context'])))
 		{
 			// Display button allowing to add product documentation as e-mail attachment
 			$buttonAdd = '<input id="addproductdoc" class="button" type="submit" value="'.$langs->trans('AddProductDocAsAttachment').'" name="addproductdoc" />';
