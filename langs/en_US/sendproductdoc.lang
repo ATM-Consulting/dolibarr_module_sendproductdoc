@@ -3,3 +3,7 @@ AddProductDocAsAttachment=Add product documentation
 RemoveProductDocAsAttachment=Remove product documentation
 XFilesHasBeenAdded=File(s) added : %s
 XFilesHasBeenRemoved=File(s) removed from e-mail : %s
+
+# ADMIN
+SendProductDocSetup=Send product doc by e-mail module setup
+ExtensionsAllowedToBeSend=Authorized extensions (empty for all)
