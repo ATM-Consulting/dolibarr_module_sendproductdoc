@@ -15,7 +15,10 @@ class ActionsSendProductDoc
 			// Display button allowing to add product documentation as e-mail attachment
 			$buttonAdd = '<input id="addproductdoc" class="button" type="submit" value="'.$langs->trans('AddProductDocAsAttachment').'" name="addproductdoc" />';
 			$buttonRemove = '<input id="removeproductdoc" class="button" type="submit" value="'.$langs->trans('RemoveProductDocAsAttachment').'" name="removeproductdoc" />';
-			$buttons = '<div style="float: right">'.$buttonAdd.$buttonRemove.'</div>';
+			// TODO : fix att coming from document
+			//$buttonAddObjDoc = '<input id="addobjectdoc" class="button" type="submit" value="'.$langs->trans('AddObjectDocAsAttachment').'" name="addobjectdoc" />';
+			//$buttonRemoveObjDoc = '<input id="removeobjectdoc" class="button" type="submit" value="'.$langs->trans('RemoveObjectDocAsAttachment').'" name="removeobjectdoc" />';
+			$buttons = '<div style="text-align: center; padding: 10px;">'.$buttonAdd.$buttonRemove.$buttonAddObjDoc.$buttonRemoveObjDoc.'</div>';
 			?>
 			<script type="text/javascript">
 				$(document).ready(function() {
@@ -31,83 +34,131 @@ class ActionsSendProductDoc
 		global $conf,$langs;
 		$langs->load('sendproductdoc@sendproductdoc');
 		
-		// Search for attached files to each product in the document and add it as an attachement to the e-mail
-		if (GETPOST('addproductdoc'))
-		{
-			/*echo '<pre>';
-			print_r($object);
-			echo '</pre>';*/
-			include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
+		// First we get the attachment list from session
+		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
 			$listofpaths = (! empty($_SESSION["listofpaths"])) ? explode(';',$_SESSION["listofpaths"]) : array();
 			$listofnames = (! empty($_SESSION["listofnames"])) ? explode(';',$_SESSION["listofnames"]) : array();
 			$listofmimes = (! empty($_SESSION["listofmimes"])) ? explode(';',$_SESSION["listofmimes"]) : array();
-			$nbFilesAdded = 0;
 			
+			$stdFunc = false;
+		}
+		
+		// Search for attached files to each product in the document and add it as an attachement to the e-mail
+		if (GETPOST('addproductdoc'))
+		{
+			$nbFiles = 0;
 			foreach($object->lines as $line) {
-				$ref = dol_sanitizeFileName($line->product_ref);
-				
 				// Get files attached to the product
-				$fileList = dol_dir_list($conf->product->dir_output . '/' . $ref,'files',0);
-
-				foreach($fileList as $fileParams) {
-					// Attachment in the e-mail
-					$file = $fileParams['fullname'];
-					if (! in_array($file,$listofpaths)) {
-						$listofpaths[] = $file;
-						$listofnames[] = basename($file);
-						$listofmimes[] = dol_mimetype($file);
-						$nbFilesAdded++;
-					}
-				}
+				$ref = dol_sanitizeFileName($line->product_ref);
+				$objectType = 'product';
+				$path = $conf->{$objectType}->dir_output . '/' . $ref;
+				$nbFiles += $this->_addFiles($listofpaths, $listofnames, $listofmimes, $path);
 			}
 			
-			$_SESSION["listofpaths"]=join(';',$listofpaths);
-			$_SESSION["listofnames"]=join(';',$listofnames);
-			$_SESSION["listofmimes"]=join(';',$listofmimes);
-			
-			setEventMessage($langs->trans("XFilesHasBeenAdded",$nbFilesAdded));
-			
-			$action = 'presend';
+			setEventMessage($langs->trans("XFilesHasBeenAdded",$nbFiles));
 		}
 
 		// For each attached file, look if the path comes from product and delete the attachement
 		if (GETPOST('removeproductdoc'))
 		{
-			include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-			$listofpaths = (! empty($_SESSION["listofpaths"])) ? explode(';',$_SESSION["listofpaths"]) : array();
-			$listofnames = (! empty($_SESSION["listofnames"])) ? explode(';',$_SESSION["listofnames"]) : array();
-			$listofmimes = (! empty($_SESSION["listofmimes"])) ? explode(';',$_SESSION["listofmimes"]) : array();
-			$nbFilesRemoved = 0;
+			$objectType = 'product';
+			$nbFiles = $this->_removeFiles($listofpaths, $listofnames, $listofmimes, $objectType);
+			setEventMessage($langs->trans("XFilesHasBeenRemoved",$nbFiles));
+		}
+		
+		// Search for attached files to the document and add it as an attachement to the e-mail
+		if (GETPOST('addobjectdoc'))
+		{
+			// Get files attached to the document
+			$ref = dol_sanitizeFileName($object->ref);
+			$objectType = $object->element;
+			$path = $conf->{$objectType}->dir_output . '/' . $ref;
+			$nbFiles = $this->_addFiles($listofpaths, $listofnames, $listofmimes, $path);
+			setEventMessage($langs->trans("XFilesHasBeenAdded",$nbFiles));
+		}
+
+		// For each attached file, look if the path comes from the doc and delete the attachement, except for the auto generated PDF
+		if (GETPOST('removeobjectdoc'))
+		{
+			$objectType = $object->element;
+			$nbFiles = $this->_removeFiles($listofpaths, $listofnames, $listofmimes, $objectType);
+			setEventMessage($langs->trans("XFilesHasBeenRemoved",$nbFiles));
+		}
+		
+		// Overload standard function to avoid physically deleting files that are product doc or object attachments
+		if (GETPOST('removedfile')) {
+			$iFile = GETPOST('removedfile');
+			$iFile--;
 			
-			foreach($listofpaths as $i => $filePath) {
-				if(strpos($filePath, $conf->product->dir_output) !== false) {
-					unset($listofpaths[$i]);
-					unset($listofnames[$i]);
-					unset($listofmimes[$i]);
-					$nbFilesRemoved++;
-				}
+			if(strpos($listofpaths[$iFile], $conf->product->dir_output) !== false) {
+				$filename = $listofnames[$iFile];
+				$this->_removeFile($listofpaths, $listofnames, $listofmimes, $iFile);
+				setEventMessage($langs->trans("FileHasBeenRemoved", $filename));
+			} else {
+				$stdFunc = true;
 			}
+		}
+
+		// Last we put back the attachments into session
+		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
 			$_SESSION["listofpaths"]=join(';',$listofpaths);
 			$_SESSION["listofnames"]=join(';',$listofnames);
 			$_SESSION["listofmimes"]=join(';',$listofmimes);
 			
-			setEventMessage($langs->trans("XFilesHasBeenRemoved",$nbFilesRemoved));
-			
-			$action = 'presend';
+			if(!$stdFunc) {
+	 			$action='presend'; // Still in presend mode
+				unset($_POST['removedfile']); // Avoid standard function called when attachment is removed
+			}
 		}
 		
 		return 0;
 	}
 
-	function deleteFile($parameters, &$object, &$action, $hookmanager) {
-		global $conf;
+	// Add files from the list as e-mail attachments
+	private function _addFiles(&$listofpaths, &$listofnames, &$listofmimes, $path) {
+		global $langs;
 		
-		// When user removes an attached file to the e-mail, file is deleted excepted for first one (auto generated PDF)
-		// If the file came from a product, we must not delete it, just remove from e-mail attachments
-		if (in_array('fileslib',explode(':',$parameters['context'])) && !empty($parameters['file'])) {
-			if(strpos($parameters['file'], $conf->product->dir_output) !== false) return 'deleted';
+		include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
+		$fileList = dol_dir_list($path,'files',0);
+		$nbFiles = 0;
+		
+		foreach($fileList as $fileParams) {
+			// Attachment in the e-mail
+			$file = $fileParams['fullname'];
+			if (! in_array($file, $listofpaths)) {
+				$listofpaths[] = $file;
+				$listofnames[] = basename($file);
+				$listofmimes[] = dol_mimetype($file);
+				$nbFiles++;
+			}
 		}
 		
-		return 0;
+		return $nbFiles;
+	}
+	
+	// Remove files that are e-mail attachments and coming from some source
+	private function _removeFiles(&$listofpaths, &$listofnames, &$listofmimes, $from, $exceptFirst=true) {
+		global $conf, $langs;
+		
+		$nbFiles = 0;
+		
+		foreach($listofpaths as $i => $filePath) {
+			if($exceptFirst && $i == 0) continue;
+			if(strpos($filePath, $conf->{$from}->dir_output) !== false) {
+				$this->_removeFile($listofpaths, $listofnames, $listofmimes, $i);
+				$nbFiles++;
+			}
+		}
+		
+		return $nbFiles;
+	}
+	
+	// Remove a file from the attachment list
+	private function _removeFile(&$listofpaths, &$listofnames, &$listofmimes, $iFile) {
+		global $conf, $langs;
+		
+		unset($listofpaths[$iFile]);
+		unset($listofnames[$iFile]);
+		unset($listofmimes[$iFile]);
 	}
 }

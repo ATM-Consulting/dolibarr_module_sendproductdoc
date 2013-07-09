@@ -1,8 +1,11 @@
 Module231000Name=Envoi doc technique
 AddProductDocAsAttachment=Ajouter la documentation des produits
 RemoveProductDocAsAttachment=Retirer la documentation des produits
+AddObjectDocAsAttachment=Ajouter les fichiers joints du document
+RemoveObjectDocAsAttachment=Retirer les fichiers joints du document
 XFilesHasBeenAdded=Fichier(s) ajouté(s) en pièce-jointe : %s
 XFilesHasBeenRemoved=Fichier(s) retiré(s) des pièce-jointes : %s
+FileHasBeenRemoved=Fichier "%s" retiré des pièce-jointes
 
 # ADMIN
 SendProductDocSetup=Configuration du module d'envoi de documentation produit par e-mail

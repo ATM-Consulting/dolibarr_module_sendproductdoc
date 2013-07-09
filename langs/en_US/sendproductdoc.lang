@@ -1,8 +1,11 @@
 Module231000Name=Send technical doc.
 AddProductDocAsAttachment=Add product documentation
 RemoveProductDocAsAttachment=Remove product documentation
-XFilesHasBeenAdded=File(s) added : %s
-XFilesHasBeenRemoved=File(s) removed from e-mail : %s
+AddObjectDocAsAttachment=Add document attachments
+RemoveObjectDocAsAttachment=Remove document attachments
+XFilesHasBeenAdded=File(s) added to e-mail attachments : %s
+XFilesHasBeenRemoved=File(s) removed from e-mail attachments : %s
+FileHasBeenRemoved=File "%s" removed from e-mail attachments
 
 # ADMIN
 SendProductDocSetup=Send product doc by e-mail module setup
