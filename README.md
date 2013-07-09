@@ -2,7 +2,7 @@
 | Send product doc |
 +------------------+
 
-A module for Dolibarr. Activate it in Accueil > Configuration > Modules > Modules complémentaires > Outils multi-modules.
+A module for Dolibarr. Activate it in Home > Setup > Modules > Other modules > Multi-modules tools.
 Allows to add product documentation (attachments on product card) as e-mail attachment when using the "Send by mail" function in Dolibarr.
 
 +-----------------------------+
