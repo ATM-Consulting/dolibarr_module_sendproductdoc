@@ -1,4 +1,6 @@
-Module231000Name=Envoi doc technique
+Module104000Name=Envoi doc technique
+Module104000Desc=Permet l'ajout automatique des documents produits lors de l'envoi par e-mail
+
 AddProductDocAsAttachment=Ajouter la documentation des produits
 RemoveProductDocAsAttachment=Retirer la documentation des produits
 AddObjectDocAsAttachment=Ajouter les fichiers joints du document

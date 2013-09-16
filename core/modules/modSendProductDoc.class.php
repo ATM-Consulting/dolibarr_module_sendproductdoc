@@ -46,7 +46,7 @@ class modSendProductDoc extends DolibarrModules
 
 		// Id for module (must be unique).
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
-		$this->numero = 231000;
+		$this->numero = 104000;
 		// Key text used to identify module (for permissions, menus, etc...)
 		$this->rights_class = 'sendproductdoc';
 
@@ -56,7 +56,7 @@ class modSendProductDoc extends DolibarrModules
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
 		$this->name = preg_replace('/^mod/i','',get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
-		$this->description = "Envoi des documents produits par e-mail";
+		$this->description = "Permet l'ajout automatique des documents produits lors de l'envoi par e-mail";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 		$this->version = '1.0';
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)

@@ -1,4 +1,6 @@
-Module231000Name=Send technical doc.
+Module104000Name=Send technical doc.
+Module104000Desc=Allow to add atomatically product documents when sending an e-mail
+
 AddProductDocAsAttachment=Add product documentation
 RemoveProductDocAsAttachment=Remove product documentation
 AddObjectDocAsAttachment=Add document attachments
