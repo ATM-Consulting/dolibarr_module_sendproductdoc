@@ -15,9 +15,8 @@ class ActionsSendProductDoc
 			// Display button allowing to add product documentation as e-mail attachment
 			$buttonAdd = '<input id="addproductdoc" class="button" type="submit" value="'.$langs->trans('AddProductDocAsAttachment').'" name="addproductdoc" />';
 			$buttonRemove = '<input id="removeproductdoc" class="button" type="submit" value="'.$langs->trans('RemoveProductDocAsAttachment').'" name="removeproductdoc" />';
-			// TODO : fix att coming from document
-			//$buttonAddObjDoc = '<input id="addobjectdoc" class="button" type="submit" value="'.$langs->trans('AddObjectDocAsAttachment').'" name="addobjectdoc" />';
-			//$buttonRemoveObjDoc = '<input id="removeobjectdoc" class="button" type="submit" value="'.$langs->trans('RemoveObjectDocAsAttachment').'" name="removeobjectdoc" />';
+			$buttonAddObjDoc = '<input id="addobjectdoc" class="button" type="submit" value="'.$langs->trans('AddObjectDocAsAttachment').'" name="addobjectdoc" />';
+			$buttonRemoveObjDoc = '<input id="removeobjectdoc" class="button" type="submit" value="'.$langs->trans('RemoveObjectDocAsAttachment').'" name="removeobjectdoc" />';
 			$buttons = '<div style="text-align: center; padding: 10px;">'.$buttonAdd.$buttonRemove.$buttonAddObjDoc.$buttonRemoveObjDoc.'</div>';
 			?>
 			<script type="text/javascript">
