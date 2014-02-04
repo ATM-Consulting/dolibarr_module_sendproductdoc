@@ -42,11 +42,22 @@ class ActionsSendProductDoc
 			$stdFunc = false;
 		}
 		
+		$this->TFileAdded=array();
+		if(!empty($listofpaths)) {
+				foreach($listofpaths as $file) {
+					
+					$md5 = md5(file_get_contents($file));
+					$this->TFileAdded[] = $md5;
+				}
+			
+		}
+		
+		
 		// Search for attached files to each product in the document and add it as an attachement to the e-mail
 		if (GETPOST('addproductdoc'))
 		{
 			$nbFiles = 0;
-			$this->TFileAdded=array();
+			
 			
 			foreach($object->lines as $line) {
 				// Get files attached to the product
@@ -70,8 +81,7 @@ class ActionsSendProductDoc
 		// Search for attached files to the document and add it as an attachement to the e-mail
 		if (GETPOST('addobjectdoc'))
 		{
-			$this->TFileAdded=array();
-			
+				
 			// Get files attached to the document
 			$ref = dol_sanitizeFileName($object->ref);
 			$objectType = $object->element;
