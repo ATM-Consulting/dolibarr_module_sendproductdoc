@@ -46,6 +46,8 @@ class ActionsSendProductDoc
 		if (GETPOST('addproductdoc'))
 		{
 			$nbFiles = 0;
+			$this->TFileAdded=array();
+			
 			foreach($object->lines as $line) {
 				// Get files attached to the product
 				$ref = dol_sanitizeFileName($line->product_ref);
@@ -68,6 +70,8 @@ class ActionsSendProductDoc
 		// Search for attached files to the document and add it as an attachement to the e-mail
 		if (GETPOST('addobjectdoc'))
 		{
+			$this->TFileAdded=array();
+			
 			// Get files attached to the document
 			$ref = dol_sanitizeFileName($object->ref);
 			$objectType = $object->element;
@@ -124,8 +128,11 @@ class ActionsSendProductDoc
 		foreach($fileList as $fileParams) {
 			// Attachment in the e-mail
 			$file = $fileParams['fullname'];
-			if (! in_array($file, $listofpaths)) {
+			
+			if (! in_array($file, $listofpaths) && !in_array($file, $this->TFileAdded)) {
 				$listofpaths[] = $file;
+				$this->TFileAdded = $file;
+				
 				$listofnames[] = basename($file);
 				$listofmimes[] = dol_mimetype($file);
 				$nbFiles++;
