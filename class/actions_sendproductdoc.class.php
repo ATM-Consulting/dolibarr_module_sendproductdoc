@@ -128,10 +128,11 @@ class ActionsSendProductDoc
 		foreach($fileList as $fileParams) {
 			// Attachment in the e-mail
 			$file = $fileParams['fullname'];
+			$md5 = md5(file_get_contents($file));
 			
-			if (! in_array($file, $listofpaths) && !in_array($file, $this->TFileAdded)) {
+			if (! in_array($file, $listofpaths) && !in_array($md5, $this->TFileAdded)) {
 				$listofpaths[] = $file;
-				$this->TFileAdded = $file;
+				$this->TFileAdded[] = $md5;
 				
 				$listofnames[] = basename($file);
 				$listofmimes[] = dol_mimetype($file);
