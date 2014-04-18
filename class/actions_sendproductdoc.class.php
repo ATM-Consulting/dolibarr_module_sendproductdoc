@@ -21,10 +21,10 @@ class ActionsSendProductDoc
 			?>
 			<script type="text/javascript">
 				$(document).ready(function() {
-					$('#addfile').after('<?= $buttons ?>');
+					$('#addfile').after('<?php echo $buttons ?>');
 				});
 			</script>
-			<?
+			<?php
 		}
 		return 0;
 	}
