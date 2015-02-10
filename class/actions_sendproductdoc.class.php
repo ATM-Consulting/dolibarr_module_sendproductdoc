@@ -10,6 +10,8 @@ class ActionsSendProductDoc
 			(in_array('propalcard',explode(':',$parameters['context']))
 			|| in_array('ordercard',explode(':',$parameters['context']))
 			|| in_array('invoicecard',explode(':',$parameters['context']))
+			|| in_array('supplierordercard',explode(':',$parameters['context']))
+			|| in_array('supplierinvoicecard',explode(':',$parameters['context']))
 		))
 		{
 			// Display button allowing to add product documentation as e-mail attachment
