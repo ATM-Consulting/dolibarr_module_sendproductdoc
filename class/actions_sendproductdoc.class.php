@@ -54,6 +54,13 @@ class ActionsSendProductDoc
 			
 		}
 		
+		/*echo '<pre>';
+		print_r($_REQUEST);
+		echo '</pre>';
+		
+		echo '<pre>';
+		print_r($object);
+		echo '</pre>';*/
 		
 		// Search for attached files to each product in the document and add it as an attachement to the e-mail
 		if (GETPOST('addproductdoc'))
@@ -83,11 +90,18 @@ class ActionsSendProductDoc
 		// Search for attached files to the document and add it as an attachement to the e-mail
 		if (GETPOST('addobjectdoc'))
 		{
-				
 			// Get files attached to the document
 			$ref = dol_sanitizeFileName($object->ref);
-			$objectType = $object->element;
-			$path = $conf->{$objectType}->dir_output . '/' . $ref;
+			if($object->element == 'order_supplier'){
+				$path = $conf->fournisseur->commande->dir_output . '/' . $ref;
+			}
+			else if($object->element == 'invoice_supplier'){
+				$path = $conf->fournisseur->facture->dir_output . '/' . $ref;
+			}
+			else{
+				$path = $conf->{$objectType}->dir_output . '/' . $ref;
+			}
+
 			$nbFiles = $this->_addFiles($listofpaths, $listofnames, $listofmimes, $path);
 			setEventMessage($langs->trans("XFilesHasBeenAdded",$nbFiles));
 		}
@@ -125,7 +139,7 @@ class ActionsSendProductDoc
 				unset($_POST['removedfile']); // Avoid standard function called when attachment is removed
 			}
 		}
-		
+		//exit;
 		return 0;
 	}
 
@@ -136,7 +150,7 @@ class ActionsSendProductDoc
 		include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 		$fileList = dol_dir_list($path,'files',0);
 		$nbFiles = 0;
-		
+
 		foreach($fileList as $fileParams) {
 			// Attachment in the e-mail
 			$file = $fileParams['fullname'];
@@ -161,9 +175,19 @@ class ActionsSendProductDoc
 		
 		$nbFiles = 0;
 		
+		if($from == 'order_supplier'){
+			$from = $conf->fournisseur->commande->dir_output;
+		}
+		else if($from == 'invoice_supplier'){
+			$from = $conf->fournisseur->facture->dir_output;
+		}
+		else{
+			$from = $conf->{$objectType}->dir_output;
+		}
+		
 		foreach($listofpaths as $i => $filePath) {
 			if($exceptFirst && $i == 0) continue;
-			if(strpos($filePath, $conf->{$from}->dir_output) !== false) {
+			if(strpos($filePath, $from) !== false) {
 				$this->_removeFile($listofpaths, $listofnames, $listofmimes, $i);
 				$nbFiles++;
 			}
