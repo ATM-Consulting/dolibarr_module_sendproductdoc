@@ -182,7 +182,7 @@ class ActionsSendProductDoc
 			$from = $conf->fournisseur->facture->dir_output;
 		}
 		else{
-			$from = $conf->{$objectType}->dir_output;
+			$from = $conf->{$from}->dir_output;
 		}
 		
 		foreach($listofpaths as $i => $filePath) {
