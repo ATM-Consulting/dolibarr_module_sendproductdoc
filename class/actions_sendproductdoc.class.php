@@ -15,10 +15,10 @@ class ActionsSendProductDoc
 		))
 		{
 			// Display button allowing to add product documentation as e-mail attachment
-			$buttonAdd = '<input id="addproductdoc" class="button" type="submit" value="'.$langs->trans('AddProductDocAsAttachment').'" name="addproductdoc" />';
-			$buttonRemove = '<input id="removeproductdoc" class="button" type="submit" value="'.$langs->trans('RemoveProductDocAsAttachment').'" name="removeproductdoc" />';
-			$buttonAddObjDoc = '<input id="addobjectdoc" class="button" type="submit" value="'.$langs->trans('AddObjectDocAsAttachment').'" name="addobjectdoc" />';
-			$buttonRemoveObjDoc = '<input id="removeobjectdoc" class="button" type="submit" value="'.$langs->trans('RemoveObjectDocAsAttachment').'" name="removeobjectdoc" />';
+			$buttonAdd = '<input id="addproductdoc" class="button" type="submit" value="'.$langs->trans('AddProductDocAsAttachment').'" name="addproductdoc" style="margin: 4px;" />';
+			$buttonRemove = '<input id="removeproductdoc" class="button" type="submit" value="'.$langs->trans('RemoveProductDocAsAttachment').'" name="removeproductdoc" style="margin: 4px;" />';
+			$buttonAddObjDoc = '<input id="addobjectdoc" class="button" type="submit" value="'.$langs->trans('AddObjectDocAsAttachment').'" name="addobjectdoc" style="margin: 4px;" />';
+			$buttonRemoveObjDoc = '<input id="removeobjectdoc" class="button" type="submit" value="'.$langs->trans('RemoveObjectDocAsAttachment').'" name="removeobjectdoc" style="margin: 4px;" />';
 			$buttons = '<div style="text-align: center; padding: 10px;">'.$buttonAdd.$buttonRemove.$buttonAddObjDoc.$buttonRemoveObjDoc.'</div>';
 			?>
 			<script type="text/javascript">
@@ -99,7 +99,7 @@ class ActionsSendProductDoc
 				$path = $conf->fournisseur->facture->dir_output . '/' . $ref;
 			}
 			else{
-				$path = $conf->{$objectType}->dir_output . '/' . $ref;
+				$path = $conf->{$object->element}->dir_output . '/' . $ref;
 			}
 
 			$nbFiles = $this->_addFiles($listofpaths, $listofnames, $listofmimes, $path);
