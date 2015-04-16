@@ -19,7 +19,7 @@ class ActionsSendProductDoc
 			$buttonRemove = '<input id="removeproductdoc" class="button" type="submit" value="'.$langs->trans('RemoveProductDocAsAttachment').'" name="removeproductdoc" style="margin: 4px;" />';
 			$buttonAddObjDoc = '<input id="addobjectdoc" class="button" type="submit" value="'.$langs->trans('AddObjectDocAsAttachment').'" name="addobjectdoc" style="margin: 4px;" />';
 			$buttonRemoveObjDoc = '<input id="removeobjectdoc" class="button" type="submit" value="'.$langs->trans('RemoveObjectDocAsAttachment').'" name="removeobjectdoc" style="margin: 4px;" />';
-			$buttons = '<div style="text-align: center; padding: 10px;">'.$buttonAdd.$buttonRemove.$buttonAddObjDoc.$buttonRemoveObjDoc.'</div>';
+			$buttons = '<div style="margin: 10px 10px 10px 0;">'.$buttonAdd.$buttonRemove.$buttonAddObjDoc.$buttonRemoveObjDoc.'</div>';
 			?>
 			<script type="text/javascript">
 				$(document).ready(function() {
