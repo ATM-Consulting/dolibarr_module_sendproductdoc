@@ -1,0 +1,14 @@
+Module104000Name=Invia documentazione tecnica
+Module104000Desc=Permette di aggiungere automaticamente la documentazione del prodotto quando si inviano mail
+
+AddProductDocAsAttachment=Aggiungi la documentazione del prodotto
+RemoveProductDocAsAttachment=Elimina la documentazione del prodotto
+AddObjectDocAsAttachment=Aggiungi documenti allegati
+RemoveObjectDocAsAttachment=Aggiungi documenti allegati
+XFilesHasBeenAdded=File(s) aggiunti all'email come allegati: %s
+XFilesHasBeenRemoved=File(s) rimossi all'email come allegati: %s
+FileHasBeenRemoved=File "%s" rimosso dall'email come allegato
+
+# ADMIN
+SendProductDocSetup=Impostazioni modulo per l'invio della documentazione del prodotto via email
+ExtensionsAllowedToBeSend=Estensioni autorizzate (vuoti per tutti)
