@@ -34,13 +34,12 @@ class ActionsSendProductDoc
 	function doActions($parameters, &$object, &$action, $hookmanager) {
 		global $conf,$langs;
 		$langs->load('sendproductdoc@sendproductdoc');
-		
+		$keytoavoidconflict = '-pro'.$object->id;
 		// First we get the attachment list from session
 		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
-			$listofpaths = (! empty($_SESSION["listofpaths"])) ? explode(';',$_SESSION["listofpaths"]) : array();
-			$listofnames = (! empty($_SESSION["listofnames"])) ? explode(';',$_SESSION["listofnames"]) : array();
-			$listofmimes = (! empty($_SESSION["listofmimes"])) ? explode(';',$_SESSION["listofmimes"]) : array();
-			
+			$listofpaths = (! empty($_SESSION["listofpaths".$keytoavoidconflict])) ? explode(';',$_SESSION["listofpaths".$keytoavoidconflict]) : array();
+			$listofnames = (! empty($_SESSION["listofnames".$keytoavoidconflict])) ? explode(';',$_SESSION["listofnames".$keytoavoidconflict]) : array();
+			$listofmimes = (! empty($_SESSION["listofmimes".$keytoavoidconflict])) ? explode(';',$_SESSION["listofmimes".$keytoavoidconflict]) : array();
 			$stdFunc = false;
 		}
 		
@@ -130,9 +129,9 @@ class ActionsSendProductDoc
 
 		// Last we put back the attachments into session
 		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
-			$_SESSION["listofpaths"]=join(';',$listofpaths);
-			$_SESSION["listofnames"]=join(';',$listofnames);
-			$_SESSION["listofmimes"]=join(';',$listofmimes);
+			$_SESSION["listofpaths".$keytoavoidconflict]=join(';',$listofpaths);
+			$_SESSION["listofnames".$keytoavoidconflict]=join(';',$listofnames);
+			$_SESSION["listofmimes".$keytoavoidconflict]=join(';',$listofmimes);
 			
 			if(!$stdFunc) {
 	 			$action='presend'; // Still in presend mode
@@ -150,14 +149,14 @@ class ActionsSendProductDoc
 		include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 		$fileList = dol_dir_list($path,'files',0);
 		$nbFiles = 0;
-
 		foreach($fileList as $fileParams) {
 			// Attachment in the e-mail
+			
 			$file = $fileParams['fullname'];
 			$md5 = md5(file_get_contents($file));
-			
 			if (! in_array($file, $listofpaths) && !in_array($md5, $this->TFileAdded)) {
 				$listofpaths[] = $file;
+				
 				$this->TFileAdded[] = $md5;
 				
 				$listofnames[] = basename($file);
