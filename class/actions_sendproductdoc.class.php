@@ -34,7 +34,9 @@ class ActionsSendProductDoc
 	function doActions($parameters, &$object, &$action, $hookmanager) {
 		global $conf,$langs;
 		$langs->load('sendproductdoc@sendproductdoc');
-		$keytoavoidconflict = '-pro'.$object->id;
+		if((float)DOL_VERSION>=4){
+			$keytoavoidconflict = '-pro'.$object->id;
+		}
 		// First we get the attachment list from session
 		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
 			$listofpaths = (! empty($_SESSION["listofpaths".$keytoavoidconflict])) ? explode(';',$_SESSION["listofpaths".$keytoavoidconflict]) : array();
