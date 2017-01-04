@@ -34,6 +34,7 @@ class ActionsSendProductDoc
 	function doActions($parameters, &$object, &$action, $hookmanager) {
 		global $conf,$langs;
 		$langs->load('sendproductdoc@sendproductdoc');
+		$keytoavoidconflict="";
 		if((float)DOL_VERSION>=4){
 			$keytoavoidconflict = '-pro'.$object->id;
 		}
