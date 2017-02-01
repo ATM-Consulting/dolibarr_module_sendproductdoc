@@ -35,15 +35,15 @@ class ActionsSendProductDoc
 		global $conf,$langs;
 		$langs->load('sendproductdoc@sendproductdoc');
 		
-		$trackid = '';
-		if(DOL_VERSION >= 4.0) $trackid = '-'.GETPOST('trackid');
-		
+		$keytoavoidconflict='';
+		if((float)DOL_VERSION>=4){
+			$keytoavoidconflict = '-'.GETPOST('trackid');
+		}
 		// First we get the attachment list from session
 		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
-			$listofpaths = (! empty($_SESSION["listofpaths".$trackid])) ? explode(';',$_SESSION["listofpaths".$trackid]) : array();
-			$listofnames = (! empty($_SESSION["listofnames".$trackid])) ? explode(';',$_SESSION["listofnames".$trackid]) : array();
-			$listofmimes = (! empty($_SESSION["listofmimes".$trackid])) ? explode(';',$_SESSION["listofmimes".$trackid]) : array();
-			
+			$listofpaths = (! empty($_SESSION["listofpaths".$keytoavoidconflict])) ? explode(';',$_SESSION["listofpaths".$keytoavoidconflict]) : array();
+			$listofnames = (! empty($_SESSION["listofnames".$keytoavoidconflict])) ? explode(';',$_SESSION["listofnames".$keytoavoidconflict]) : array();
+			$listofmimes = (! empty($_SESSION["listofmimes".$keytoavoidconflict])) ? explode(';',$_SESSION["listofmimes".$keytoavoidconflict]) : array();
 			$stdFunc = false;
 		}
 		
@@ -133,9 +133,9 @@ class ActionsSendProductDoc
 
 		// Last we put back the attachments into session
 		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
-			$_SESSION["listofpaths".$trackid]=join(';',$listofpaths);
-			$_SESSION["listofnames".$trackid]=join(';',$listofnames);
-			$_SESSION["listofmimes".$trackid]=join(';',$listofmimes);
+			$_SESSION["listofpaths".$keytoavoidconflict]=join(';',$listofpaths);
+			$_SESSION["listofnames".$keytoavoidconflict]=join(';',$listofnames);
+			$_SESSION["listofmimes".$keytoavoidconflict]=join(';',$listofmimes);
 			
 			if(!$stdFunc) {
 	 			$action='presend'; // Still in presend mode
@@ -158,6 +158,7 @@ class ActionsSendProductDoc
 			// Attachment in the e-mail
 			$file = $fileParams['fullname'];
 			$md5 = md5(file_get_contents($file));
+			
 			if (! in_array($file, $listofpaths) && !in_array($md5, $this->TFileAdded)) {
 				$listofpaths[] = $file;
 				$this->TFileAdded[] = $md5;
