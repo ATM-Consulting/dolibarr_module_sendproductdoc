@@ -34,9 +34,10 @@ class ActionsSendProductDoc
 	function doActions($parameters, &$object, &$action, $hookmanager) {
 		global $conf,$langs;
 		$langs->load('sendproductdoc@sendproductdoc');
+		
 		$keytoavoidconflict='';
 		if((float)DOL_VERSION>=4){
-			$keytoavoidconflict = '-pro'.$object->id;
+			$keytoavoidconflict = '-'.GETPOST('trackid');
 		}
 		// First we get the attachment list from session
 		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
@@ -152,14 +153,14 @@ class ActionsSendProductDoc
 		include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 		$fileList = dol_dir_list($path,'files',0);
 		$nbFiles = 0;
+
 		foreach($fileList as $fileParams) {
 			// Attachment in the e-mail
-			
 			$file = $fileParams['fullname'];
 			$md5 = md5(file_get_contents($file));
+			
 			if (! in_array($file, $listofpaths) && !in_array($md5, $this->TFileAdded)) {
 				$listofpaths[] = $file;
-				
 				$this->TFileAdded[] = $md5;
 				
 				$listofnames[] = basename($file);
