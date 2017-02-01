@@ -35,11 +35,14 @@ class ActionsSendProductDoc
 		global $conf,$langs;
 		$langs->load('sendproductdoc@sendproductdoc');
 		
+		$trackid = '';
+		if(DOL_VERSION >= 4.0) $trackid = '-'.GETPOST('trackid');
+		
 		// First we get the attachment list from session
 		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
-			$listofpaths = (! empty($_SESSION["listofpaths"])) ? explode(';',$_SESSION["listofpaths"]) : array();
-			$listofnames = (! empty($_SESSION["listofnames"])) ? explode(';',$_SESSION["listofnames"]) : array();
-			$listofmimes = (! empty($_SESSION["listofmimes"])) ? explode(';',$_SESSION["listofmimes"]) : array();
+			$listofpaths = (! empty($_SESSION["listofpaths".$trackid])) ? explode(';',$_SESSION["listofpaths".$trackid]) : array();
+			$listofnames = (! empty($_SESSION["listofnames".$trackid])) ? explode(';',$_SESSION["listofnames".$trackid]) : array();
+			$listofmimes = (! empty($_SESSION["listofmimes".$trackid])) ? explode(';',$_SESSION["listofmimes".$trackid]) : array();
 			
 			$stdFunc = false;
 		}
@@ -130,9 +133,9 @@ class ActionsSendProductDoc
 
 		// Last we put back the attachments into session
 		if(GETPOST('addproductdoc') || GETPOST('removeproductdoc') || GETPOST('addobjectdoc') || GETPOST('removeobjectdoc') || GETPOST('removedfile')) {
-			$_SESSION["listofpaths"]=join(';',$listofpaths);
-			$_SESSION["listofnames"]=join(';',$listofnames);
-			$_SESSION["listofmimes"]=join(';',$listofmimes);
+			$_SESSION["listofpaths".$trackid]=join(';',$listofpaths);
+			$_SESSION["listofnames".$trackid]=join(';',$listofnames);
+			$_SESSION["listofmimes".$trackid]=join(';',$listofmimes);
 			
 			if(!$stdFunc) {
 	 			$action='presend'; // Still in presend mode
@@ -155,7 +158,6 @@ class ActionsSendProductDoc
 			// Attachment in the e-mail
 			$file = $fileParams['fullname'];
 			$md5 = md5(file_get_contents($file));
-			
 			if (! in_array($file, $listofpaths) && !in_array($md5, $this->TFileAdded)) {
 				$listofpaths[] = $file;
 				$this->TFileAdded[] = $md5;
