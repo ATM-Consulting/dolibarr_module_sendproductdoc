@@ -151,14 +151,14 @@ class ActionsSendProductDoc
 		global $langs;
 		
 		include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-		$fileList = dol_dir_list($path,'files',0);
+		$fileList = dol_dir_list($path,'files',1,'','temp');
 		$nbFiles = 0;
-
+//var_dump($path,  $fileList,'<br>');
 		foreach($fileList as $fileParams) {
 			// Attachment in the e-mail
 			$file = $fileParams['fullname'];
 			$md5 = md5(file_get_contents($file));
-			
+
 			if (! in_array($file, $listofpaths) && !in_array($md5, $this->TFileAdded)) {
 				$listofpaths[] = $file;
 				$this->TFileAdded[] = $md5;
