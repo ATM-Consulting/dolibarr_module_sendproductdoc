@@ -50,7 +50,6 @@ class ActionsSendProductDoc
 		$this->TFileAdded=array();
 		if(!empty($listofpaths)) {
 				foreach($listofpaths as $file) {
-					
 					$md5 = md5(file_get_contents($file));
 					$this->TFileAdded[] = $md5;
 				}
@@ -76,6 +75,15 @@ class ActionsSendProductDoc
 				$ref = dol_sanitizeFileName($line->product_ref);
 				$objectType = 'product';
 				$path = $conf->{$objectType}->dir_output . '/' . $ref;
+				
+				// FIX comptaibility with 3.8 old path
+				$objentity = 1;
+				if(!empty($object->entity)) $objentity = $object->entity;
+				if (! empty($conf->global->PRODUCT_USE_OLD_PATH_FOR_PHOTO))    // For backward compatiblity, we scan also old dirs
+				{
+					$path = $conf->{$objectType}->multidir_output[$objentity].'/'.substr(substr("000".$line->fk_product, -2),1,1).'/'.substr(substr("000".$line->fk_product, -2),0,1).'/'.$line->fk_product."/photos";
+				}
+				
 				$nbFiles += $this->_addFiles($listofpaths, $listofnames, $listofmimes, $path);
 			}
 			
@@ -151,14 +159,14 @@ class ActionsSendProductDoc
 		global $langs;
 		
 		include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-		$fileList = dol_dir_list($path,'files',1,'','temp');
+		$filter = array(0=>'temp',1=>'thumbs');
+		$fileList = dol_dir_list($path,'files',1,'',$filter);
 		$nbFiles = 0;
-//var_dump($path,  $fileList,'<br>');
 		foreach($fileList as $fileParams) {
 			// Attachment in the e-mail
 			$file = $fileParams['fullname'];
 			$md5 = md5(file_get_contents($file));
-
+			
 			if (! in_array($file, $listofpaths) && !in_array($md5, $this->TFileAdded)) {
 				$listofpaths[] = $file;
 				$this->TFileAdded[] = $md5;
