@@ -73,6 +73,9 @@ class ActionsSendProductDoc
 			foreach($object->lines as $line) {
 				// Get files attached to the product
 				$ref = dol_sanitizeFileName($line->product_ref);
+
+				if(empty($ref)) continue; // On évite de scanner tout le répertoire produit
+
 				$objectType = 'product';
 				$path = $conf->{$objectType}->dir_output . '/' . $ref;
 				
