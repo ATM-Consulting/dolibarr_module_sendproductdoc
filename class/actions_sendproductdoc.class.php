@@ -80,7 +80,7 @@ class ActionsSendProductDoc
 				$path = $conf->{$objectType}->dir_output . '/' . $ref;
 				
 				// FIX comptaibility with 3.8 old path
-				$objentity = 1;
+				$objentity = $conf->entity;
 				if(!empty($object->entity)) $objentity = $object->entity;
 				if (! empty($conf->global->PRODUCT_USE_OLD_PATH_FOR_PHOTO))    // For backward compatiblity, we scan also old dirs
 				{
